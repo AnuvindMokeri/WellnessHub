@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% block title %}Vendors{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Marketplace sellers</span><h1>Vendors</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='vendors' %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Business</th><th>Owner</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for v in vendors %}
+          <tr>
+            <td><b>{{ v.business_name }}</b></td>
+            <td>{{ v.owner_name }}</td>
+            <td>{{ v.email }}<br><span class="helptext">{{ v.phone }}</span></td>
+            <td><span class="badge badge-{{ v.status }}">{{ v.get_status_display }}</span></td>
+            <td class="flex" style="gap:6px;">
+              {% if v.status != 'approved' %}
+              <form method="post" action="{% url 'update_vendor_status' v.pk %}"><input type="hidden" name="action" value="approve">{% csrf_token %}<button class="btn btn-gold btn-sm" type="submit">Approve</button></form>
+              {% endif %}
+              {% if v.status != 'rejected' %}
+              <form method="post" action="{% url 'update_vendor_status' v.pk %}"><input type="hidden" name="action" value="reject">{% csrf_token %}<button class="btn btn-ghost btn-sm" type="submit">Reject</button></form>
+              {% endif %}
+              <form method="post" action="{% url 'update_vendor_status' v.pk %}" onsubmit="return confirm('Block this vendor account?');"><input type="hidden" name="action" value="block">{% csrf_token %}<button class="btn btn-berry btn-sm" type="submit">Block</button></form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5">No vendors yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

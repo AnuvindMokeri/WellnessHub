@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% block title %}Reply to complaint{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Complaint #{{ complaint.pk }}</span><h1>Reply to {{ complaint.user.username }}</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='complaints' %}
+    <div class="form-card" style="max-width:none;">
+      <h3>{{ complaint.subject }}</h3>
+      <p>{{ complaint.message }}</p>
+      {% if complaint.reply %}
+        <div class="card" style="background:var(--sage-light);border:none;margin-bottom:18px;">
+          <b>Current reply</b>
+          <p style="margin:6px 0 0;color:var(--ink);">{{ complaint.reply }}</p>
+        </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Send reply</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

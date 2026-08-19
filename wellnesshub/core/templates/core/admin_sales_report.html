@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% block title %}Sales report{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Marketplace performance</span><h1>Sales report</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='sales' %}
+    <div>
+      <div class="stat-card accent" style="margin-bottom:24px;max-width:280px;"><span class="eyebrow">Total revenue</span><span class="value">₹{{ total_revenue }}</span></div>
+      <div class="grid grid-2">
+        <div>
+          <h3>By vendor</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Vendor</th><th>Units</th><th>Revenue</th></tr></thead>
+              <tbody>
+                {% for row in by_vendor %}
+                <tr><td>{{ row.vendor__business_name }}</td><td>{{ row.units_sold }}</td><td>₹{{ row.revenue }}</td></tr>
+                {% empty %}<tr><td colspan="3">No sales yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3>By category</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Category</th><th>Units</th><th>Revenue</th></tr></thead>
+              <tbody>
+                {% for row in by_category %}
+                <tr><td>{{ row.product__category__name|default:"—" }}</td><td>{{ row.units_sold }}</td><td>₹{{ row.revenue }}</td></tr>
+                {% empty %}<tr><td colspan="3">No sales yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

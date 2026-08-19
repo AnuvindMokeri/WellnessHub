@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Account</span><h1>My profile</h1></div>
+  <div class="form-card">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+    </form>
+    <div class="form-footer"><a href="{% url 'change_password' %}">Change password</a></div>
+  </div>
+</div>
+{% endblock %}

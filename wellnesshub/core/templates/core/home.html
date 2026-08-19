@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block title %}Wellness products from trusted vendors{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <svg class="hero-sprig one" viewBox="0 0 200 200" fill="none"><path d="M100 190C40 150 30 60 100 10c70 50 60 140 0 180Z" stroke="#F1EEE2" stroke-width="1.5"/><path d="M100 190V10" stroke="#F1EEE2" stroke-width="1.5"/></svg>
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow" style="color:var(--gold);">Multi-vendor wellness marketplace</span>
+      <h1>Everyday rituals for a <em>healthier</em>, calmer life.</h1>
+      <p class="lede">Skincare, fitness gear, herbal remedies and healthy snacks — sourced from verified independent wellness vendors, delivered to your door.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-gold">Browse products</a>
+        <a href="{% url 'vendor_signup' %}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.5);">Become a vendor</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>{{ total_products }}+</b><span>Products listed</span></div>
+        <div class="stat"><b>{{ categories.count }}</b><span>Categories</span></div>
+        <div class="stat"><b>100%</b><span>Verified vendors</span></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <span class="tag">This week</span>
+      <h3 style="margin-top:6px;">New in: Herbal &amp; Ayurvedic</h3>
+      <p style="margin-bottom:16px;">Cold-pressed oils, adaptogenic blends and traditional remedies from small-batch makers.</p>
+      {% for p in featured|slice:':3' %}
+        <div class="info-row"><span>{{ p.name|truncatechars:28 }}</span><b>₹{{ p.price }}</b></div>
+      {% empty %}
+        <div class="info-row"><span>Add vendors &amp; products to see them here</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="container" id="products">
+  <div class="category-row">
+    <a href="{% url 'home' %}{% if query %}?q={{ query }}{% endif %}" class="category-pill {% if not active_category %}active{% endif %}">✦ All</a>
+    {% for cat in categories %}
+      <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}" class="category-pill {% if active_category == cat.slug %}active{% endif %}">{{ cat.icon }} {{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="divider-sprig"><span class="eyebrow">{% if query %}Results for "{{ query }}"{% else %}Curated for you{% endif %}</span></div>
+
+  {% if products %}
+  <div class="grid grid-4">
+    {% for product in products %}
+    <a href="{% url 'product_detail' product.pk %}" class="product-card">
+      <div class="product-thumb">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <span class="placeholder-icon">🌿</span>
+        {% endif %}
+      </div>
+      <div class="body">
+        <span class="cat">{{ product.category.name|default:"Wellness" }}</span>
+        <h3>{{ product.name }}</h3>
+        <span class="vendor-name">by {{ product.vendor.business_name }}</span>
+        {% if product.review_count %}
+          <span><span class="stars">{{ product.average_rating|star_display }}</span> <span class="rating-count">({{ product.review_count }})</span></span>
+        {% endif %}
+        <div class="price-row">
+          <span class="price">₹{{ product.price }}</span>
+          {% if not product.in_stock %}<span class="badge badge-cancelled">Out of stock</span>{% endif %}
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="icon">🌱</div>
+    <h3>No products found</h3>
+    <p>Try a different search or category — or check back once vendors have added products.</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="container section">
+  <div class="divider-sprig"><span class="eyebrow">Why WellnessHub</span></div>
+  <div class="grid grid-3">
+    <div class="card card-organic">
+      <h3>🔎 Compare with confidence</h3>
+      <p>Browse detailed descriptions, prices and genuine ratings across many vendors before you decide.</p>
+    </div>
+    <div class="card card-organic">
+      <h3>🛡️ Verified vendors</h3>
+      <p>Every seller is reviewed and approved by our admin team before their products go live.</p>
+    </div>
+    <div class="card card-organic">
+      <h3>📦 Track every order</h3>
+      <p>From confirmation to delivery, follow your order status in real time from your account.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

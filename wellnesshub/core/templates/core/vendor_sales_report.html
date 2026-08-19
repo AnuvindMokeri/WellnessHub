@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block title %}Sales report{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Performance</span><h1>Sales report</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_vendor_nav.html' with active='sales' %}
+    <div>
+      <div class="grid grid-2" style="margin-bottom:24px;">
+        <div class="stat-card accent"><span class="eyebrow">Total revenue</span><span class="value">₹{{ total_revenue }}</span></div>
+        <div class="stat-card gold"><span class="eyebrow">Units sold</span><span class="value">{{ total_units }}</span></div>
+      </div>
+      {% if by_product %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Product</th><th>Units sold</th><th>Revenue</th></tr></thead>
+          <tbody>
+            {% for row in by_product %}
+            <tr><td>{{ row.product__name|default:"—" }}</td><td>{{ row.units_sold }}</td><td>₹{{ row.revenue }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state"><div class="icon">📊</div><p>No sales recorded yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Catalog oversight</span><h1>Products</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='products' %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th>Vendor</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.vendor.business_name }}</td>
+            <td>{{ p.category.name|default:"—" }}</td>
+            <td>₹{{ p.price }}</td>
+            <td>{{ p.stock }}</td>
+            <td>{% if p.is_active %}<span class="badge badge-delivered">Active</span>{% else %}<span class="badge badge-cancelled">Removed</span>{% endif %}</td>
+            <td>{% if p.is_active %}<a href="{% url 'admin_remove_product' p.pk %}" class="btn btn-ghost btn-sm" onclick="return confirm('Remove this product listing?');">Remove</a>{% endif %}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">No products listed yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

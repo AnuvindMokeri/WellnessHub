@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">People</span><h1>Users</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='users' %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          {% for p in profiles %}
+          <tr>
+            <td>{{ p.user.first_name|default:"—" }}</td>
+            <td>{{ p.user.username }}</td>
+            <td>{{ p.user.email }}</td>
+            <td>{{ p.phone }}</td>
+            <td>{% if p.user.is_active %}<span class="badge badge-delivered">Active</span>{% else %}<span class="badge badge-cancelled">Blocked</span>{% endif %}</td>
+            <td><a href="{% url 'toggle_user_active' p.user.pk %}" class="btn btn-ghost btn-sm">{% if p.user.is_active %}Block{% else %}Unblock{% endif %}</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No users yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">All orders</span><h1>Orders</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='orders' %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>#{{ order.pk }}</td>
+            <td>{{ order.user.first_name|default:order.user.username }}</td>
+            <td>{{ order.items.count }}</td>
+            <td>₹{{ order.total_amount }}</td>
+            <td><span class="badge {{ order.status|status_badge }}">{{ order.get_status_display }}</span></td>
+            <td>{{ order.order_date|date:"d M Y" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No orders yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

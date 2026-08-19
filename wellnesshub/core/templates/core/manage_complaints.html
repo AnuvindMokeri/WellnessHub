@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}Complaints{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Customer support</span><h1>Complaints</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='complaints' %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Customer</th><th>Subject</th><th>Message</th><th>Status</th><th>Date</th><th></th></tr></thead>
+        <tbody>
+          {% for c in complaints %}
+          <tr>
+            <td>{{ c.user.username }}</td>
+            <td>{{ c.subject }}</td>
+            <td>{{ c.message|truncatechars:60 }}</td>
+            <td>{% if c.is_resolved %}<span class="badge badge-delivered">Replied</span>{% else %}<span class="badge badge-pending">Pending</span>{% endif %}</td>
+            <td>{{ c.complaint_date|date:"d M Y" }}</td>
+            <td><a href="{% url 'reply_complaint' c.pk %}" class="btn btn-ghost btn-sm">{% if c.is_resolved %}View{% else %}Reply{% endif %}</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No complaints raised.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

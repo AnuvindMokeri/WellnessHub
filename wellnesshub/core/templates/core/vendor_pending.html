@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block title %}Approval pending{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="form-card" style="text-align:center;">
+    <div style="font-size:2.4rem;">⏳</div>
+    <h2>Your vendor account is under review</h2>
+    <p>Thanks for registering <b>{{ vendor.business_name }}</b>. Our admin team is reviewing your details — you'll be able to log in and start listing products as soon as you're approved.</p>
+    <span class="badge badge-{{ vendor.status }}">{{ vendor.get_status_display }}</span>
+    <div style="margin-top:22px;">
+      <a href="{% url 'logout' %}" class="btn btn-outline">Log out</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

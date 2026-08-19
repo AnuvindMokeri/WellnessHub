@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block title %}My products{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header flex-between">
+    <div><span class="eyebrow">Inventory</span><h1>My products</h1></div>
+    <a href="{% url 'add_product' %}" class="btn btn-gold">+ Add product</a>
+  </div>
+  <div class="dash-grid">
+    {% include 'core/_vendor_nav.html' with active='products' %}
+    <div>
+      {% if products %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {% for p in products %}
+            <tr>
+              <td><b>{{ p.name }}</b></td>
+              <td>{{ p.category.name|default:"—" }}</td>
+              <td>₹{{ p.price }}</td>
+              <td>{{ p.stock }}</td>
+              <td>{% if p.is_active %}<span class="badge badge-delivered">Active</span>{% else %}<span class="badge badge-cancelled">Inactive</span>{% endif %}</td>
+              <td>
+                <a href="{% url 'edit_product' p.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+                <a href="{% url 'delete_product' p.pk %}" class="btn btn-ghost btn-sm" onclick="return confirm('Remove this product?');">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state"><div class="icon">🧴</div><h3>No products yet</h3><p>Add your first product to start selling.</p><a href="{% url 'add_product' %}" class="btn btn-primary">Add product</a></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

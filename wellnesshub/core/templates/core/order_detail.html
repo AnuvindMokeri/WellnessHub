@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block title %}Order #{{ order.pk }}{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header flex-between">
+    <div><span class="eyebrow">Placed {{ order.order_date|date:"d M Y, h:i A" }}</span><h1>Order #{{ order.pk }}</h1></div>
+    <span class="badge {{ order.status|status_badge }}" style="font-size:0.8rem;padding:8px 16px;">{{ order.get_status_display }}</span>
+  </div>
+  <div class="two-col">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th>Vendor</th><th>Qty</th><th>Price</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          {% for item in order.items.all %}
+          <tr>
+            <td>{{ item.product.name|default:"Product removed" }}</td>
+            <td>{{ item.vendor.business_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.subtotal }}</td>
+            <td><span class="badge {{ item.item_status|status_badge }}">{{ item.get_item_status_display }}</span></td>
+            <td>
+              {% if order.status == 'delivered' and item.product %}
+                <a href="{% url 'add_review' item.product.pk %}" class="btn btn-ghost btn-sm">Review</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <aside class="card">
+      <h3>Delivery details</h3>
+      <p>{{ order.address }}</p>
+      <div class="info-row"><span>Payment</span><b>{{ order.payment_method }}</b></div>
+      <div class="info-row"><span>Total</span><b>₹{{ order.total_amount }}</b></div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

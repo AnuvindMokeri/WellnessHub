@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}WellnessHub{% endblock %} · WellnessHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="{% url 'home' %}" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3C7 3 4 7 4 12c0 5.5 3.5 9 8 9s8-3.5 8-9c0-5-3-9-8-9Z" stroke="#B98232" stroke-width="1.6"/><path d="M12 21V9M12 9c0-3 2-5 5-6M12 9C12 6 10 4 7 3" stroke="#B98232" stroke-width="1.6" stroke-linecap="round"/></svg>
+      WellnessHub
+    </a>
+    <form class="nav-search" action="{% url 'home' %}" method="get">
+      <input type="search" name="q" placeholder="Search skincare, fitness, herbal…" value="{{ request.GET.q|default:'' }}">
+      <button type="submit" aria-label="Search">→</button>
+    </form>
+    <div class="nav-links">
+      {% if user.is_authenticated %}
+        {% if user.profile.role == 'customer' %}
+          <a href="{% url 'view_cart' %}">Cart {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a>
+          <a href="{% url 'my_orders' %}">Orders</a>
+          <a href="{% url 'my_complaints' %}">Support</a>
+          <a href="{% url 'customer_profile' %}" class="nav-pill">{{ user.first_name|default:user.username }}</a>
+        {% elif user.profile.role == 'vendor' %}
+          <a href="{% url 'vendor_dashboard' %}" class="nav-pill gold">Vendor Panel</a>
+        {% elif user.profile.role == 'admin' %}
+          <a href="{% url 'admin_dashboard' %}" class="nav-pill gold">Admin Panel</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'vendor_signup' %}">Sell on WellnessHub</a>
+        <a href="{% url 'login' %}" class="nav-pill">Login</a>
+        <a href="{% url 'customer_signup' %}" class="nav-pill gold">Sign up</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <h4 style="font-family:var(--font-display);font-size:1.2rem;">WellnessHub</h4>
+      <p style="color:rgba(255,255,255,0.6);max-width:32ch;">A multi-vendor marketplace for skincare, fitness, herbal and personal-care products — built as an IGNOU BCA project.</p>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="{% url 'home' %}">All products</a>
+      <a href="{% url 'about' %}">About</a>
+    </div>
+    <div>
+      <h4>Sell</h4>
+      <a href="{% url 'vendor_signup' %}">Become a vendor</a>
+      <a href="{% url 'login' %}">Vendor login</a>
+    </div>
+    <div>
+      <h4>Account</h4>
+      <a href="{% url 'customer_signup' %}">Create account</a>
+      <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025–2026 WellnessHub · IGNOU BCA Synopsis Project</div>
+</footer>
+
+</body>
+</html>

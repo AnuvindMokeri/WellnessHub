@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% block title %}Become a vendor{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="form-card wide">
+    <span class="eyebrow">Grow your wellness business</span>
+    <h2>Register as a vendor</h2>
+    <p>Your account will be reviewed by our admin team before you can start listing products — this usually keeps the marketplace trustworthy for shoppers.</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-gold btn-block">Submit for approval</button>
+    </form>
+    <div class="form-footer">
+      Already registered? <a href="{% url 'login' %}">Log in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block title %}Ratings & reviews{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Customer feedback</span><h1>Ratings &amp; reviews</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_vendor_nav.html' with active='reviews' %}
+    <div>
+      {% if reviews %}
+        {% for r in reviews %}
+        <div class="card" style="margin-bottom:12px;">
+          <div class="flex-between">
+            <b>{{ r.product.name }}</b>
+            <span class="stars">{{ r.rating|star_display }}</span>
+          </div>
+          <p style="margin:8px 0 0;">{{ r.review }}</p>
+          <span class="helptext">{{ r.user.first_name|default:r.user.username }} · {{ r.review_date|date:"d M Y" }}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="empty-state"><div class="icon">⭐</div><p>No reviews yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

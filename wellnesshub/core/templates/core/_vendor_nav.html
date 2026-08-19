@@ -1,0 +1,9 @@
+<nav class="dash-nav">
+  <a href="{% url 'vendor_dashboard' %}" class="{% if active == 'dashboard' %}active{% endif %}">🏠 Dashboard</a>
+  <a href="{% url 'vendor_products' %}" class="{% if active == 'products' %}active{% endif %}">🧴 Products</a>
+  <a href="{% url 'vendor_orders' %}" class="{% if active == 'orders' %}active{% endif %}">📦 Orders</a>
+  <a href="{% url 'vendor_sales_report' %}" class="{% if active == 'sales' %}active{% endif %}">📊 Sales report</a>
+  <a href="{% url 'vendor_reviews' %}" class="{% if active == 'reviews' %}active{% endif %}">⭐ Ratings &amp; reviews</a>
+  <a href="{% url 'vendor_profile' %}" class="{% if active == 'profile' %}active{% endif %}">🏷️ Business profile</a>
+  <a href="{% url 'change_password' %}" class="{% if active == 'password' %}active{% endif %}">🔒 Change password</a>
+</nav>

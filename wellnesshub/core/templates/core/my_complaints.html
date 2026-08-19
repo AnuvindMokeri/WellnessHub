@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block title %}Support{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">We're here to help</span><h1>Complaints &amp; support</h1></div>
+  <div class="two-col">
+    <div>
+      {% if complaints %}
+        {% for c in complaints %}
+        <div class="card" style="margin-bottom:14px;">
+          <div class="flex-between">
+            <b>{{ c.subject }}</b>
+            <span class="badge {% if c.is_resolved %}badge-delivered{% else %}badge-pending{% endif %}">{% if c.is_resolved %}Replied{% else %}Awaiting reply{% endif %}</span>
+          </div>
+          <p style="margin:8px 0;">{{ c.message }}</p>
+          <span class="helptext">Submitted {{ c.complaint_date|date:"d M Y" }}</span>
+          {% if c.reply %}
+          <div class="card" style="background:var(--sage-light);margin-top:12px;border:none;">
+            <b>Admin reply</b>
+            <p style="margin:6px 0 0;color:var(--ink);">{{ c.reply }}</p>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state"><div class="icon">💬</div><h3>No complaints raised</h3><p>If something's wrong with an order, let us know using the form.</p></div>
+      {% endif %}
+    </div>
+    <aside class="form-card" style="max-width:none;">
+      <h3>Raise a new complaint</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-berry btn-block">Submit complaint</button>
+      </form>
+    </aside>
+  </div>
+</div>
+{% endblock %}

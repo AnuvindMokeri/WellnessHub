@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Step 2 of 2</span><h1>Checkout</h1></div>
+  <div class="two-col">
+    <div class="form-card" style="max-width:none;">
+      <h3>Delivery &amp; payment</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block">Place order · ₹{{ total }}</button>
+      </form>
+    </div>
+    <aside class="card">
+      <h3>Order summary</h3>
+      {% for item in items %}
+        <div class="info-row"><span>{{ item.product.name|truncatechars:22 }} × {{ item.quantity }}</span><b>₹{{ item.total_price }}</b></div>
+      {% endfor %}
+      <div class="info-row" style="border-top:1px solid var(--line);margin-top:8px;padding-top:12px;"><span>Total</span><b style="color:var(--forest-dk);">₹{{ total }}</b></div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

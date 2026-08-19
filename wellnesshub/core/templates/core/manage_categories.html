@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">Catalog structure</span><h1>Categories</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_admin_nav.html' with active='categories' %}
+    <div>
+      <div class="card" style="margin-bottom:22px;max-width:420px;">
+        <h3>Add category</h3>
+        <form method="post">
+          {% csrf_token %}
+          <p><label>Name</label><input type="text" name="name" required></p>
+          <p><label>Icon (emoji)</label><input type="text" name="icon" placeholder="🌿" maxlength="4"></p>
+          <button type="submit" class="btn btn-primary">Add category</button>
+        </form>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Icon</th><th>Name</th><th>Products</th></tr></thead>
+          <tbody>
+            {% for c in categories %}
+            <tr><td>{{ c.icon }}</td><td>{{ c.name }}</td><td>{{ c.product_count }}</td></tr>
+            {% empty %}
+            <tr><td colspan="3">No categories yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block title %}Vendor dashboard{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="page-header"><span class="eyebrow">{{ vendor.business_name }}</span><h1>Vendor dashboard</h1></div>
+  <div class="dash-grid">
+    {% include 'core/_vendor_nav.html' with active='dashboard' %}
+    <div>
+      <div class="grid grid-4" style="margin-bottom:26px;">
+        <div class="stat-card accent"><span class="eyebrow">Products</span><span class="value">{{ product_count }}</span></div>
+        <div class="stat-card"><span class="eyebrow">Low stock</span><span class="value">{{ low_stock_count }}</span></div>
+        <div class="stat-card"><span class="eyebrow">Pending orders</span><span class="value">{{ pending_orders }}</span></div>
+        <div class="stat-card gold"><span class="eyebrow">Total sales</span><span class="value">₹{{ total_sales }}</span></div>
+      </div>
+
+      <div class="flex-between" style="margin-bottom:14px;">
+        <h3 style="margin:0;">Recent orders</h3>
+        <a href="{% url 'add_product' %}" class="btn btn-gold btn-sm">+ Add product</a>
+      </div>
+      {% if recent_orders %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Order</th><th>Product</th><th>Qty</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for item in recent_orders %}
+            <tr>
+              <td>#{{ item.order.pk }}</td>
+              <td>{{ item.product.name|default:"—" }}</td>
+              <td>{{ item.quantity }}</td>
+              <td><span class="badge {{ item.item_status|status_badge }}">{{ item.get_item_status_display }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state"><div class="icon">📦</div><p>No orders yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
