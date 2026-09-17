@@ -1,5 +1,6 @@
 Django>=4.2,<5.1
 Pillow>=10.0
+gunicorn
 
 # Uncomment if you switch the database to MySQL in settings.py:
-# mysqlclient>=2.2
+mysqlclient>=2.2
