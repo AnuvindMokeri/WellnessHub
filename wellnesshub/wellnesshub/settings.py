@@ -67,22 +67,17 @@ WSGI_APPLICATION = 'wellnesshub.wsgi.application'
 #   3. Uncomment the MySQL block below and comment out the SQLite block.
 # ---------------------------------------------------------------------------
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 # MySQL configuration (uncomment to use, and comment out the block above):
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'wellnesshub',
-        'USER': 'root',
-        'PASSWORD': 'anuvind',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'USER': 'wellnesshub_user',
+        'PASSWORD': 'C6qIhUPiUPvCCLBjv6fa97GtaSN12BQm',
+        'HOST': 'dpg-dalsjg8ae00c73cg4db0-a',
+        'PORT': '5432',
     }
 }
 
