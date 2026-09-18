@@ -1,0 +1,37 @@
+"""
+Management command: create_default_superuser
+
+Creates a Django superuser from environment variables, but only if a
+superuser with that username doesn't already exist. Safe to run on
+every deploy (via Render's Build Command) without failing on repeat runs.
+
+REQUIRED ENVIRONMENT VARIABLES (set these in Render's dashboard under
+Environment, NOT in your code/GitHub repo):
+  DJANGO_SUPERUSER_USERNAME
+  DJANGO_SUPERUSER_EMAIL
+  DJANGO_SUPERUSER_PASSWORD
+
+USAGE:
+  python manage.py create_default_superuser
+"""
+
+import os
+
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand, CommandError
+
+
+class Command(BaseCommand):
+    help = "Creates a superuser from env vars if one with that username doesn't already exist."
+
+    def handle(self, *args, **options):
+        username = "admin"
+        email = "admin@gmail.com"
+        password = "123admin"  # <-- edit this before committing
+
+        if User.objects.filter(username=username).exists():
+            self.stdout.write(f"Superuser '{username}' already exists — skipping.")
+            return
+
+        User.objects.create_superuser(username=username, email=email, password=password)
+        self.stdout.write(self.style.SUCCESS(f"Superuser '{username}' created."))
